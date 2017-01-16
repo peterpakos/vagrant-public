@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+curl -O https://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
+yum -y install --nogpgcheck puppetlabs-release-* epel-release
+rm -f puppetlabs-release-*
+
+yum -y update
+yum -y install puppet vim-enhanced dkms kernel-devel wget
+yum -y clean all
+
+sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+sed -i -e 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+

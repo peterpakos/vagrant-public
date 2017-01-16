@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+export DEBIAN_FRONTEND=noninteractive
+
+wget -nv -N https://apt.puppetlabs.com/puppetlabs-release-wheezy.deb
+dpkg -i puppetlabs-release-*
+rm -f puppetlabs-release-*
+
+apt-get update
+apt-get -y -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" upgrade
+apt-get -y dist-upgrade
+apt-get -y install "linux-headers-$(uname -r)" build-essential dkms puppet vim
+apt-get -y autoremove
+apt-get -y clean

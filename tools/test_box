@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+DIR="$(cd "$(dirname "$0")" && pwd)" && cd "$DIR"
+BOX="$(basename "$DIR")"
+
+if [[ -d "${BOX}/.vagrant" ]]; then
+  (
+  cd "$BOX"
+  vagrant destroy -f
+  )
+fi
+
+rm -rf "$BOX"
+
+if [[ ! -f package.box ]]; then
+  printf "File package.box does not exist. Exiting...\n" >&2
+  exit 1
+fi
+
+vagrant box list | grep -q '^sles-11.3-64' && vagrant box remove "$BOX"
+
+vagrant box add --name "$BOX" package.box
+
+mkdir "$BOX"
+(
+cd "$BOX"
+vagrant init "$BOX"
+vagrant up
+vagrant ssh
+vagrant destroy -f
+)
+
+vagrant box remove "$BOX"
+
+rm -rf "$BOX" .vagrant
+

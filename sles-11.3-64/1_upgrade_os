@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+wget http://romolo.cmb.usc.edu/installs/SLES-11-SP3-SDK/CD1/suse/x86_64/sle-sdk-release-11.3-1.69.x86_64.rpm
+wget http://romolo.cmb.usc.edu/installs/SLES-11-SP3-SDK/CD1/suse/x86_64/sle-sdk-release-SDK-11.3-1.69.x86_64.rpm
+rpm -ivh sle-sdk-release-*
+rm -f sle-sdk-release-*
+
+zypper addrepo http://download.opensuse.org/distribution/11.3/repo/oss/ oss
+
+zypper --gpg-auto-import-keys refresh
+#zypper --non-interactive update
+zypper --non-interactive install puppet vim kernel-devel
+zypper clean
+
+grep -q '^vagrant:' /etc/group || groupadd vagrant
+sed -i -e 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+touch ~/.eula-accepted /root/.eula-accepted

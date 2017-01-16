@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+wget -nv -N https://yum.puppetlabs.com/puppetlabs-release-el-5.noarch.rpm
+yum -y install --nogpgcheck puppetlabs-release-* epel-release
+rm -f puppetlabs-release-*
+
+yum -y update
+yum -y install puppet vim-enhanced kernel-devel dkms
+yum -y clean all
+
