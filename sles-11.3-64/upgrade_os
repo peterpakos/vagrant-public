@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cat <<EOF > /etc/zypp/repos.d/suse.repo
+[SLES1]
+name=SLES1
+enabled=1
+autorefresh=1
+baseurl=http://romolo.cmb.usc.edu/installs/SLES11-SP3-x86_64/CD1/
+path=/
+type=yast2
+keeppackages=0
+
+[SLES2]
+name=SLES2
+enabled=1
+autorefresh=1
+baseurl=http://romolo.cmb.usc.edu/installs/SLES11-SP3-x86_64/CD2/
+path=/
+type=yast2
+keeppackages=0
+EOF
+
+cat <<EOF > /etc/zypp/repos.d/sdk.repo
+[SDK1]
+name=SLES-SDK-CD1
+enabled=1
+autorefresh=1
+baseurl=http://romolo.cmb.usc.edu/installs/SLES-11-SP3-SDK/CD1/
+path=/
+type=yast2
+keeppackages=0
+
+[SDK2]
+name=SLES-SDK-CD2
+enabled=1
+autorefresh=1
+baseurl=http://romolo.cmb.usc.edu/installs/SLES-11-SP3-SDK/CD2/
+path=/
+type=yast2
+keeppackages=0
+EOF
+
+zypper --gpg-auto-import-keys refresh
+zypper -n install --auto-agree-with-licenses sle-sdk-release sle-sdk-release-SDK rubygems
+zypper clean
+
+grep -q '^vagrant:' /etc/group || groupadd vagrant
+sed -i -e 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sudo -u vagrant touch ~vagrant/.eula-accepted && touch /root/.eula-accepted
+
+gem install json_pure -v1.8.6 --no-ri --no-rdoc --no-format-executable
+gem install puppet -v3.8.7 --no-ri --no-rdoc --no-format-executable

@@ -4,7 +4,7 @@ set -euo pipefail
 
 DIR="$(cd "$(dirname "$0")" && pwd)" && cd "$DIR"
 
-for f in Vagrantfile 1_upgrade_os; do
+for f in Vagrantfile upgrade_os; do
   if [[ ! -f "$f" ]]; then
     printf "File %s not found. Exiting...\n" "$f" >&2
     exit 1
@@ -19,9 +19,9 @@ rm -rf .vagrant package.box
 
 vagrant box update
 vagrant up || true
-vagrant ssh -c "sudo bash -s" < 1_upgrade_os
+vagrant ssh -c "sudo bash -s" < upgrade_os
 vagrant reload || true
-vagrant ssh -c "sudo bash -s" < ../tools/2_upgrade_vbguest
+vagrant ssh -c "sudo bash -s" < ../tools/upgrade_vbguest
 vagrant reload
 
 vagrant package
