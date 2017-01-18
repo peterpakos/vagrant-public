@@ -10,10 +10,15 @@ rm -f sle-sdk-release-*
 zypper addrepo http://download.opensuse.org/distribution/11.3/repo/oss/ oss
 
 zypper --gpg-auto-import-keys refresh
-#zypper --non-interactive update
-zypper --non-interactive install puppet vim kernel-devel
+#zypper -n update --force-resolution
+zypper -n install vim kernel-devel puppet
+#zypper -n install --force-resolution rubygems
 zypper clean
 
 grep -q '^vagrant:' /etc/group || groupadd vagrant
 sed -i -e 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-touch ~/.eula-accepted /root/.eula-accepted
+sudo -u vagrant touch ~vagrant/.eula-accepted && touch /root/.eula-accepted
+
+#gem install json_pure -v 2.0.1
+#gem install puppet -v 3.8.7 || true
+
