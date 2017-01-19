@@ -50,5 +50,7 @@ grep -q '^vagrant:' /etc/group || groupadd vagrant
 sed -i -e 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
 sudo -u vagrant touch ~vagrant/.eula-accepted && touch /root/.eula-accepted
 
-gem install json_pure -v1.8.6 --no-ri --no-rdoc --no-format-executable
-gem install puppet -v3.8.7 --no-ri --no-rdoc --no-format-executable
+gem install json_pure -v1.8.6
+gem install facter -v2.4.6
+gem install hiera -v1.3.4
+gem install puppet -v3.8.7 --no-ri --no-rdoc
