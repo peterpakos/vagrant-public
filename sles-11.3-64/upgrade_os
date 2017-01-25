@@ -43,14 +43,16 @@ keeppackages=0
 EOF
 
 zypper --gpg-auto-import-keys refresh
-zypper -n install --auto-agree-with-licenses sle-sdk-release sle-sdk-release-SDK rubygems
+zypper -n update
+zypper -n install --auto-agree-with-licenses sle-sdk-release sle-sdk-release-SDK rubygems augeas-devel augeas-lenses libxml2-devel
 zypper clean
 
 grep -q '^vagrant:' /etc/group || groupadd vagrant
 sed -i -e 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-sudo -u vagrant touch ~vagrant/.eula-accepted && touch /root/.eula-accepted
+sudo -u vagrant touch ~vagrant/.eula-accepted && touch /root/.eula-accepted /etc/skel/.eula-accepted
 
 gem install json_pure -v1.8.6
-gem install facter -v2.4.6
+gem install facter -v1.7.6
 gem install hiera -v1.3.4
+gem install ruby-augeas
 gem install puppet -v3.8.7 --no-ri --no-rdoc
