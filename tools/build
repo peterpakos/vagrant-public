@@ -21,7 +21,7 @@ vagrant box update
 vagrant up || true
 vagrant ssh -c "sudo bash -s" < upgrade_os
 vagrant reload || true
-vagrant ssh -c "sudo bash -s" < ../tools/upgrade_vbguest
+vagrant ssh -c "sudo bash -s" < ../tools/upgrade_vbguest || true
 vagrant reload
 
 vagrant package
