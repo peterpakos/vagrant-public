@@ -2,7 +2,9 @@
 
 set -euo pipefail
 
-wget -nv -N https://yum.puppetlabs.com/puppetlabs-release-el-5.noarch.rpm
+sed -i -e 's/\(^mirrorlist=.*$\)/#\1/' -e 's@#baseurl=http://mirror.centos.org/centos/$releasever@baseurl=http://vault.centos.org/5.11@' /etc/yum.repos.d/CentOS-Base.repo
+
+wget -nv -N http://yum.puppetlabs.com/puppetlabs-release-el-5.noarch.rpm
 yum -y install --nogpgcheck puppetlabs-release-* epel-release
 rm -f puppetlabs-release-*
 
