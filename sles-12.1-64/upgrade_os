@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cat <<EOF > /etc/zypp/repos.d/suse.repo
+[SLES12-12-1]
+name=SLES12-12-1
+enabled=1
+autorefresh=1
+baseurl=http://osmirror.shdc.wandisco.com/sles/12.1/
+path=/
+type=yast2
+keeppackages=0
+
+[devel_languages_ruby_extensions]
+name=devel_languages_ruby_extensions
+enabled=1
+autorefresh=1
+baseurl=http://download.opensuse.org/repositories/devel:languages:ruby:extensions/SLE_12/
+path=/
+type=rpm-md
+keeppackages=0
+
+[systemsmanagement_puppet]
+name=systemsmanagement_puppet
+enabled=1
+autorefresh=1
+baseurl=http://download.opensuse.org/repositories/systemsmanagement:/puppet/SLE_12/
+path=/
+type=rpm-md
+keeppackages=0
+EOF
+
+cat <<EOF > /etc/zypp/repos.d/sdk.repo
+[SLES12-12-1-SDK]
+name=SLES12-12-1-SDK
+enabled=1
+autorefresh=1
+baseurl=http://osmirror.shdc.wandisco.com/sles/SDK/12.1/
+path=/
+type=yast2
+keeppackages=0
+EOF
+
+zypper --gpg-auto-import-keys refresh
+zypper -n update
+zypper -n install --oldpackage cpp48-4.8.5-24.1.x86_64 kernel-default-3.12.49-11.1 cpp48-4.8.5-24.1.x86_64
+zypper -n remove kernel-default-3.12.62-60.64.8.2
+zypper -n install --auto-agree-with-licenses rubygem-puppet kernel-devel gcc augeas-lenses
+zypper clean
+
+sed -ie 's/allow_unsupported_modules 0/allow_unsupported_modules 1/' /etc/modprobe.d/10-unsupported-modules.conf
+
+sudo -u vagrant echo '/etc/YaST2/licenses/license-sles.txt' >/home/vagrant/.eula-accepted \
+  && echo '/etc/YaST2/licenses/license-sles.txt' > /root/.eula-accepted \
+  && echo '/etc/YaST2/licenses/license-sles.txt' > /etc/skel/.eula-accepted
+
