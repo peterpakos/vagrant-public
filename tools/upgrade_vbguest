@@ -2,15 +2,23 @@
 
 set -euo pipefail
 
+printf "Checking the latest version of VBoxGuestAdditions... "
+if VERSION=$(curl -s http://download.virtualbox.org/virtualbox/ | grep -o '>[1-9][0-9]*\.[0-9]\+\.[0-9]\+/<' | tr -d '/<>' | sort -t. -k1,1n -k2,2n -k3,3n | tail -1); then
+  printf "${VERSION}\n"
+else
+  VERSION="5.1.24"
+  printf "FAIL - using ${VERSION}\n"
+fi
+
 for dir in /opt/VBoxGuestAdditions-*; do
   if [[ -x "${dir}/uninstall.sh" ]]; then
     "${dir}/uninstall.sh"
   fi
 done
 
-wget -nv http://download.virtualbox.org/virtualbox/5.1.22/VBoxGuestAdditions_5.1.22.iso
+wget -nv http://download.virtualbox.org/virtualbox/${VERSION}/VBoxGuestAdditions_${VERSION}.iso
 mkdir -p /mnt/cdrom
-mount -o loop,ro VBoxGuestAdditions_5.1.22.iso /mnt/cdrom
+mount -o loop,ro VBoxGuestAdditions_${VERSION}.iso /mnt/cdrom
 echo 'yes' | bash /mnt/cdrom/VBoxLinuxAdditions.run
 umount /mnt/cdrom
 

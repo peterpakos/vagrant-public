@@ -12,7 +12,7 @@ for f in Vagrantfile upgrade_os; do
 done
 
 if [[ -d .vagrant ]]; then
-  vagrant destroy -f
+  vagrant destroy -f || true
 fi
 
 rm -rf .vagrant package.box

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+yum -y install https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+yum -y install epel-release
+
+yum -y update
+yum -y install bash-completion puppet-agent vim dkms kernel-devel wget
+yum -y clean all
+
+rm -f /etc/puppetlabs/puppet/hiera.yaml
+
+sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+sed -i -e 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
