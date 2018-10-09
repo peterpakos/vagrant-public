@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+dnf -y update
+dnf -y install puppet dkms kernel-devel wget
+dnf -y clean all
+
+sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
