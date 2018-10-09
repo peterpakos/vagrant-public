@@ -1,5 +1,5 @@
 # WANdisco Vagrant boxes
-The boxes can be found at [atlas.hashicorp.com](https://atlas.hashicorp.com/boxes/search?provider=virtualbox&q=wandisco).
+The boxes can be found at [app.vagrantup.com](https://app.vagrantup.com/wandisco).
 
 ## Setup
 The framework consists of a few basic BASH scripts for building, packaging and testing boxes.
@@ -23,9 +23,8 @@ The process of building a box consists of the following steps:
 ### Example
 In order to update the CentOS 7 box simply edit the required config files and run the ```build``` script:
 ```
-$ cd centos-7-64
+$ cd centos-7
 $ vim upgrade_os
-$ vim ../tools/upgrade_vbguest
 $ ./build
 ```
 If all steps complete successfully you will find a new file called ```package.box``` in the box's directory.
@@ -38,4 +37,4 @@ $ ./test
 ```
 This will spin up a Vagrant environment using the newly created box. When you exit the VM, the Vagrant environment will
 be automatically destroyed and the box's directory cleaned up. If you are happy with the box you can then upload and
-publish the resulting ```package.box``` file to the [atlas.hashicorp.com](https://atlas.hashicorp.com/) web site.
+publish the resulting ```package.box``` file to the [app.vagrantup.com](https://app.vagrantup.com/) web site.
