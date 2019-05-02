@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+yum -y update
+yum -y install openjdk8 maven python-devel python-setup-tools make makeself zip unzip tree gcc gcc-c++ docker ant openssl-devel git subversion 'xorg*'
+yum groupinstall -y 'gnome desktop'
+yum remove -y initial-setup initial-setup-gui
+yum -y clean all
+
+systemctl isolate graphical.target
+systemctl set-default graphical.target
