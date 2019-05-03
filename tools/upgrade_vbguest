@@ -4,10 +4,15 @@ set -euo pipefail
 
 printf "Checking the latest version of VBoxGuestAdditions... "
 if VERSION=$(curl -s http://download.virtualbox.org/virtualbox/ | grep -o '>[1-9][0-9]*\.[0-9]\+\.[0-9]\+/<' | tr -d '/<>' | sort -t. -k1,1n -k2,2n -k3,3n | tail -1); then
-  printf "${VERSION}\n"
+  printf "%s\n" "$VERSION"
 else
   VERSION="6.0.6"
-  printf "FAIL - using ${VERSION}\n"
+  printf "FAIL - using %s\n" "$VERSION"
+fi
+
+if [[ -d "/opt/VBoxGuestAdditions-${VERSION}" ]]; then
+  printf "The latest VBoxGuestAdditions is already installed, skipping install...\n"
+  exit 0
 fi
 
 for dir in /opt/VBoxGuestAdditions-*; do
